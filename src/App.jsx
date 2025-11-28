@@ -159,6 +159,7 @@ export default function Debate() {
                     </div>
 
                     <MessageList agents={agents} messages={messages} />
+                    <p>キーワード: ワニ</p>
                   </>
                 )}
               </div>
