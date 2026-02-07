@@ -1,7 +1,8 @@
 // src/mock/mockAPI.jsx
 export async function getArticle() {
-  const res = await fetch("/SelfDrivingCars.html");//Self Driving Cars News article
+ // const res = await fetch("/SelfDrivingCars.html");//Self Driving Cars News article
 //  const res = await fetch("/NuclearEnergy.html"); //Nuclear Energy article
+  const res = await fetch("/Surveillance.html"); //Surveillance Energy article  
   if (!res.ok) throw new Error("Failed to load News.html");
   const html = await res.text();
   const doc = new DOMParser().parseFromString(html, "text/html");
