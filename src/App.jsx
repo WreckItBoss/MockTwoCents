@@ -6,7 +6,7 @@ import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
 
 export default function Debate() {
-  const [status, setStatus] = useState(null);
+  // const [status, setStatus] = useState(null);
   const [rounds] = useState(3);
   const [teamSize] = useState(1);
   const [userPosition, setUserPosition] = useState(null);
@@ -50,7 +50,7 @@ export default function Debate() {
       const res = await generateDebate({
         numRounds: rounds,
         teamSize,
-        userPosition,
+        // userPosition,
       });
 
       const allMessages = res.messages ?? [];
@@ -202,37 +202,10 @@ export default function Debate() {
                   {!debate ? (
                     <div className="debate-controls">
                       <div className="control-row">
-                        <p className="toggle-question">
-                          Do you support or oppose{" "}
-                          <strong>Nuclear Energy</strong>?
-                        </p>
-
-                        <div className="toggle-buttons">
-                          <button
-                            className={
-                              userPosition === "agree" ? "active" : ""
-                            }
-                            onClick={() => setUserPosition("agree")}
-                          >
-                            Support
-                          </button>
-
-                          <button
-                            className={
-                              userPosition === "disagree" ? "active" : ""
-                            }
-                            onClick={() => setUserPosition("disagree")}
-                          >
-                            Oppose
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="control-row">
                         <button
                           className="generate-btn"
                           onClick={onGenerate}
-                          disabled={debateLoading || !userPosition}
+                          disabled={debateLoading}
                         >
                           {debateLoading
                             ? "生成中..."
