@@ -1,8 +1,8 @@
 // src/mock/mockAPI.jsx
 export async function getArticle() {
  // const res = await fetch("/SelfDrivingCars.html");//Self Driving Cars News article
-//  const res = await fetch("/NuclearEnergy.html"); //Nuclear Energy article
-  const res = await fetch("/Surveillance.html"); //Surveillance Energy article  
+ const res = await fetch("/NuclearEnergy.html"); //Nuclear Energy article
+  // const res = await fetch("/Surveillance.html"); //Surveillance Energy article  
   if (!res.ok) throw new Error("Failed to load News.html");
   const html = await res.text();
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -24,50 +24,49 @@ export async function generateDebate({ userPosition } = {}) {
   // ======================== Nuclear Energy ========================
   // const messages = [
   //   {
-  //     speaker: "賛成派",
+  //     speaker: "Support",
   //     side: "left",
   //     text:
-  //       "原子力エネルギーは、現代社会において必要不可欠な選択肢です。須藤元気氏が述べたように、「エネルギー安全保障と現実的対応の観点から原発は必要」との考えは、地政学的な現状を考慮した上での合理的な判断です。再生可能エネルギーだけでは、急増する電力需要を賄うことは難しいため、原子力は安定した電力供給源として重要です。もちろん、リスクや環境への影響は考慮すべきですが、安全性を確保した上での原発の活用は、持続可能な未来に向けた現実的な選択肢です。"
-  //   },
+  //       "Nuclear energy is an essential option in modern society. As Genki Sudo stated, the view that nuclear power is necessary from the perspective of energy security and realistic policy response is a reasonable judgment considering the current geopolitical situation. Since renewable energy alone may not be sufficient to meet rapidly increasing electricity demand, nuclear energy is important as a stable power source. Although risks and environmental impacts must be considered, the use of nuclear power under strict safety measures is a realistic option for a sustainable future."    },
   //   {
-  //     speaker: "反対派",
+  //     speaker: "Against",
   //     side: "right",
   //     text:
-  //       "原子力エネルギーの必要性を主張する須藤元気氏の意見には賛同できません。原発は、過去の事故や放射性廃棄物の処理問題からも明らかなように、深刻なリスクを伴います。特に、福島第一原発の事故は、原発の安全性に対する信頼を大きく損ないました。また、再生可能エネルギーの技術は急速に進化しており、太陽光や風力などのクリーンエネルギーが電力供給の主力となる可能性が高まっています。原発に依存するのではなく、持続可能なエネルギー政策を推進すべきです。"
+  //       "I cannot agree with the claim that nuclear energy is necessary. Nuclear power involves serious risks, as shown by past accidents and the problem of radioactive waste disposal. In particular, the Fukushima Daiichi accident significantly damaged public trust in nuclear safety. Renewable energy technologies are also rapidly advancing, and clean energy sources such as solar and wind have increasing potential to become major sources of electricity. Rather than depending on nuclear power, we should promote sustainable energy policies."    
   //   }
-  // ];
+  // // ];
 
 //  ======================== Self-Driving Cars ========================
-  //   const messages = [
-  //   {
-  //     speaker: "賛成派",
-  //     side: "left",
-  //     text:
-  //       "自動運転車の開発は、交通事故の減少や交通渋滞の緩和に寄与する可能性があります。Turingのデモ車は、音声指示を認識し、状況に応じた判断を行う能力を持っています。これは、従来のセンサーやマップに依存する方法よりも柔軟性が高く、実用化が進めば安全性が向上するでしょう。また、LLMを活用することで、より人間に近い判断が可能になる点も注目すべきです。確かに、現在の技術には課題がありますが、Turingの取り組みは未来の自動運転の可能性を広げる重要な一歩です。"
-  //   },
-  //   {
-  //     speaker: "反対派",
-  //     side: "right",
-  //     text:
-  //       "自動運転車の開発には多くのリスクが伴います。Turingのデモ車が音声指示を認識し、状況に応じた判断を行う能力を持つとされていますが、実際には「約6秒かかる」という遅延があるため、緊急時の対応が不十分です。この遅延は、事故を引き起こす可能性を高めます。また、AIによる判断が「トロッコ問題」に直面することは、倫理的な問題を引き起こし、責任の所在が不明確になります。自動運転車は、技術的な進歩があっても、依然として安全性や倫理的な課題を解決する必要があります。"
-  //   }
-  // ];
-
-  //======================== Surveilance state ========================
     const messages = [
     {
       speaker: "賛成派",
       side: "left",
       text:
-        "監視社会の進展は、公共の安全を確保するために不可欠です。記事にあるように、英国ではテロ対策として監視カメラが増加し、犯罪抑止に寄与しています。テロリズムや犯罪の脅威が高まる中、監視技術は市民の安全を守る手段として重要です。プライバシーの懸念は理解できますが、公共の安全と個人の自由のバランスを取ることが求められています。監視が進むことで、犯罪の発生率が低下し、社会全体の安心感が高まることは、現代社会において重要な利点です。"
+        "自動運転車の開発は、交通事故の減少や交通渋滞の緩和に寄与する可能性があります。Turingのデモ車は、音声指示を認識し、状況に応じた判断を行う能力を持っています。これは、従来のセンサーやマップに依存する方法よりも柔軟性が高く、実用化が進めば安全性が向上するでしょう。また、LLMを活用することで、より人間に近い判断が可能になる点も注目すべきです。確かに、現在の技術には課題がありますが、Turingの取り組みは未来の自動運転の可能性を広げる重要な一歩です。"
     },
     {
       speaker: "反対派",
       side: "right",
       text:
-        "公共の安全を確保するために監視技術が必要だという主張には賛同できません。監視カメラの増加が犯罪抑止に寄与するという証拠は限られており、むしろ市民のプライバシーを侵害し、自由を制限する結果を招く可能性があります。記事にあるように、英国では監視が進む一方で、政府への信頼が揺らいでいる現実も無視できません。プライバシーの侵害は、個人の自由を脅かし、社会全体の信頼関係を損なう恐れがあります。公共の安全と個人の自由のバランスを取ることは重要ですが、監視の拡大がその解決策とは言えません。"
+        "自動運転車の開発には多くのリスクが伴います。Turingのデモ車が音声指示を認識し、状況に応じた判断を行う能力を持つとされていますが、実際には「約6秒かかる」という遅延があるため、緊急時の対応が不十分です。この遅延は、事故を引き起こす可能性を高めます。また、AIによる判断が「トロッコ問題」に直面することは、倫理的な問題を引き起こし、責任の所在が不明確になります。自動運転車は、技術的な進歩があっても、依然として安全性や倫理的な課題を解決する必要があります。"
     }
   ];
+
+//   ======================== Surveilance state ========================
+//     const messages = [
+//     {
+//       speaker: "賛成派",
+//       side: "left",
+//       text:
+//         "監視社会の進展は、公共の安全を確保するために不可欠です。記事にあるように、英国ではテロ対策として監視カメラが増加し、犯罪抑止に寄与しています。テロリズムや犯罪の脅威が高まる中、監視技術は市民の安全を守る手段として重要です。プライバシーの懸念は理解できますが、公共の安全と個人の自由のバランスを取ることが求められています。監視が進むことで、犯罪の発生率が低下し、社会全体の安心感が高まることは、現代社会において重要な利点です。"
+//     },
+//     {
+//       speaker: "反対派",
+//       side: "right",
+//       text:
+//         "公共の安全を確保するために監視技術が必要だという主張には賛同できません。監視カメラの増加が犯罪抑止に寄与するという証拠は限られており、むしろ市民のプライバシーを侵害し、自由を制限する結果を招く可能性があります。記事にあるように、英国では監視が進む一方で、政府への信頼が揺らいでいる現実も無視できません。プライバシーの侵害は、個人の自由を脅かし、社会全体の信頼関係を損なう恐れがあります。公共の安全と個人の自由のバランスを取ることは重要ですが、監視の拡大がその解決策とは言えません。"
+//     }
+  // ];
 
   // agents/topics optional (kept for your UI)
   const agents = [

@@ -63,9 +63,11 @@ export default function Debate() {
         <div className="control-bar">
           <button
             onClick={() => setShowChat((s) => !s)}
-            title={showChat ? "チャットを隠す" : "チャットを表示"}
+            // title={showChat ? "チャットを隠す" : "チャットを表示"}
+            title={showChat ? "Hide Chat" : "Show Chat"}
           >
-            {showChat ? "チャットを隠す" : "チャットを表示"}
+            {/* {showChat ? "チャットを隠す" : "チャットを表示"} */}
+            {showChat ? "Hide Chat" : "Show Chat"}
           </button>
         </div>
 
@@ -79,7 +81,8 @@ export default function Debate() {
           {/* Article panel */}
           <section className="panel">
             <div className="panel-header">
-              <strong>ニュース記事</strong>
+              {/* <strong>ニュース記事</strong> */}
+              <strong>News Article</strong>
             </div>
             <div className="panel-body">
               {loadingArticle && <div>Loading article…</div>}
@@ -107,28 +110,30 @@ export default function Debate() {
           {showChat && (
             <section className="panel">
               <div className="panel-header">
-                <strong>意見生成チャット</strong>
+                {/* <strong>意見生成チャット</strong> */}
+                <strong>Generate Opinion</strong>
               </div>
               <div className="panel-body">
                 {!debate ? (
                   <div className="debate-controls">
                     <div className="control-row">
                       <p className="toggle-question">
-                        <strong>{article?.topic || article?.title || "this article"}</strong>{" "}
-                        について賛成ですか？反対ですか？
+                        {/* <strong>{article?.topic || article?.title || "this article"}</strong>{" "}
+                        について賛成ですか？反対ですか？ */}
+                        Do you support or oppose <strong>{"Nuclear Energy"}</strong>?
                       </p>
                       <div className="toggle-buttons">
                         <button
                           className={userPosition === "agree" ? "active" : ""}
                           onClick={() => setUserPosition("agree")}
                         >
-                          賛成
+                          Support
                         </button>
                         <button
                           className={userPosition === "disagree" ? "active" : ""}
                           onClick={() => setUserPosition("disagree")}
                         >
-                          反対
+                          Oppose
                         </button>
                       </div>
                     </div>
@@ -139,7 +144,8 @@ export default function Debate() {
                         onClick={onGenerate}
                         disabled={debateLoading || !userPosition}
                       >
-                        {debateLoading ? "生成中..." : "意見を生成"}
+                        {/* {debateLoading ? "生成中..." : "意見を生成"} */}
+                        {debateLoading ? "生成中..." : "Generate Opinion"}
                       </button>
                     </div>
                   </div>
@@ -154,12 +160,12 @@ export default function Debate() {
                         marginBottom: 12,
                       }}
                     >
-                      <div><div className="team-title">賛成派</div></div>
-                      <div><div className="team-title right">反対派</div></div>
+                      <div><div className="team-title">Support</div></div>
+                      <div><div className="team-title right">Against</div></div>
                     </div>
 
                     <MessageList agents={agents} messages={messages} />
-                    <p>キーワード: ワニ</p>
+                    {/* <p>キーワード: ワニ</p> */}
                   </>
                 )}
               </div>
