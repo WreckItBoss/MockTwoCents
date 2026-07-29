@@ -6,10 +6,10 @@ import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
 
 export default function Debate() {
-  // const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null);
   const [rounds] = useState(3);
   const [teamSize] = useState(1);
-  const [userPosition, setUserPosition] = useState(null);
+  // const [userPosition, setUserPosition] = useState(null);
   const [showChat, setShowChat] = useState(false);
 
   const [article, setArticle] = useState(null);
@@ -209,7 +209,7 @@ export default function Debate() {
                         >
                           {debateLoading
                             ? "生成中..."
-                            : "Generate Opinion"}
+                            : "意見を生成する"}
                         </button>
                       </div>
                     </div>
