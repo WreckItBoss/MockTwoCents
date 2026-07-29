@@ -1,78 +1,121 @@
 // src/mock/mockAPI.jsx
+
 export async function getArticle() {
- // const res = await fetch("/SelfDrivingCars.html");//Self Driving Cars News article
- const res = await fetch("/NuclearEnergy.html"); //Nuclear Energy article
-  // const res = await fetch("/Surveillance.html"); //Surveillance Energy article  
-  if (!res.ok) throw new Error("Failed to load News.html");
+  // const res = await fetch("/SelfDrivingCars.html");
+  const res = await fetch("/NuclearEnergy.html");
+  // const res = await fetch("/Surveillance.html");
+
+  if (!res.ok) {
+    throw new Error("Failed to load article");
+  }
+
   const html = await res.text();
   const doc = new DOMParser().parseFromString(html, "text/html");
-  const title = doc.querySelector("header h1")?.textContent.trim() ?? "Untitled";
-  const metaText = doc.querySelector(".meta")?.textContent.trim() ?? "";
-  const parts = metaText.split("・").map(s => s.trim());
+
+  const title =
+    doc.querySelector("header h1")?.textContent.trim() ?? "Untitled";
+
+  const metaText =
+    doc.querySelector(".meta")?.textContent.trim() ?? "";
+
+  const parts = metaText.split("・").map((part) => part.trim());
+
   const source = parts[0] || "";
-  const topic  = parts[1] || "";
-  const date   = parts[2] || null;
+  const topic = parts[1] || "";
+  const date = parts[2] || null;
+
   const articleEl = doc.querySelector("article");
-  const content = articleEl ? articleEl.textContent.trim() : "(No content)";
-  return { id: "news-1", title, source, topic, date, content };
+
+  const content = articleEl
+    ? articleEl.textContent.trim()
+    : "(No content)";
+
+  return {
+    id: "news-1",
+    title,
+    source,
+    topic,
+    date,
+    content,
+  };
 }
 
 export async function generateDebate({ userPosition } = {}) {
-  // tiny delay to show "生成中..."
-  await new Promise(r => setTimeout(r, 600));
+  // Small delay to imitate generation
+  await new Promise((resolve) => setTimeout(resolve, 600));
 
-  // ======================== Nuclear Energy ========================
-  // const messages = [
-  //   {
-  //     speaker: "Support",
-  //     side: "left",
-  //     text:
-  //       "Nuclear energy is an essential option in modern society. As Genki Sudo stated, the view that nuclear power is necessary from the perspective of energy security and realistic policy response is a reasonable judgment considering the current geopolitical situation. Since renewable energy alone may not be sufficient to meet rapidly increasing electricity demand, nuclear energy is important as a stable power source. Although risks and environmental impacts must be considered, the use of nuclear power under strict safety measures is a realistic option for a sustainable future."    },
-  //   {
-  //     speaker: "Against",
-  //     side: "right",
-  //     text:
-  //       "I cannot agree with the claim that nuclear energy is necessary. Nuclear power involves serious risks, as shown by past accidents and the problem of radioactive waste disposal. In particular, the Fukushima Daiichi accident significantly damaged public trust in nuclear safety. Renewable energy technologies are also rapidly advancing, and clean energy sources such as solar and wind have increasing potential to become major sources of electricity. Rather than depending on nuclear power, we should promote sustainable energy policies."    
-  //   }
-  // // ];
-
-//  ======================== Self-Driving Cars ========================
-    const messages = [
+  const agents = [
     {
-      speaker: "賛成派",
+      name: "Support",
       side: "left",
-      text:
-        "自動運転車の開発は、交通事故の減少や交通渋滞の緩和に寄与する可能性があります。Turingのデモ車は、音声指示を認識し、状況に応じた判断を行う能力を持っています。これは、従来のセンサーやマップに依存する方法よりも柔軟性が高く、実用化が進めば安全性が向上するでしょう。また、LLMを活用することで、より人間に近い判断が可能になる点も注目すべきです。確かに、現在の技術には課題がありますが、Turingの取り組みは未来の自動運転の可能性を広げる重要な一歩です。"
+      stance: "support",
     },
     {
-      speaker: "反対派",
+      name: "Oppose",
       side: "right",
-      text:
-        "自動運転車の開発には多くのリスクが伴います。Turingのデモ車が音声指示を認識し、状況に応じた判断を行う能力を持つとされていますが、実際には「約6秒かかる」という遅延があるため、緊急時の対応が不十分です。この遅延は、事故を引き起こす可能性を高めます。また、AIによる判断が「トロッコ問題」に直面することは、倫理的な問題を引き起こし、責任の所在が不明確になります。自動運転車は、技術的な進歩があっても、依然として安全性や倫理的な課題を解決する必要があります。"
-    }
+      stance: "oppose",
+    },
   ];
 
-//   ======================== Surveilance state ========================
-//     const messages = [
-//     {
-//       speaker: "賛成派",
-//       side: "left",
-//       text:
-//         "監視社会の進展は、公共の安全を確保するために不可欠です。記事にあるように、英国ではテロ対策として監視カメラが増加し、犯罪抑止に寄与しています。テロリズムや犯罪の脅威が高まる中、監視技術は市民の安全を守る手段として重要です。プライバシーの懸念は理解できますが、公共の安全と個人の自由のバランスを取ることが求められています。監視が進むことで、犯罪の発生率が低下し、社会全体の安心感が高まることは、現代社会において重要な利点です。"
-//     },
-//     {
-//       speaker: "反対派",
-//       side: "right",
-//       text:
-//         "公共の安全を確保するために監視技術が必要だという主張には賛同できません。監視カメラの増加が犯罪抑止に寄与するという証拠は限られており、むしろ市民のプライバシーを侵害し、自由を制限する結果を招く可能性があります。記事にあるように、英国では監視が進む一方で、政府への信頼が揺らいでいる現実も無視できません。プライバシーの侵害は、個人の自由を脅かし、社会全体の信頼関係を損なう恐れがあります。公共の安全と個人の自由のバランスを取ることは重要ですが、監視の拡大がその解決策とは言えません。"
-//     }
-  // ];
+  const messages = [
+    // ======================== Round 1 ========================
+    {
+      speaker: "Support",
+      agentIndex: 0,
+      side: "left",
+      stance: "support",
+      round: 1,
+      text: "Add the first Support message here.",
+    },
+    {
+      speaker: "Oppose",
+      agentIndex: 1,
+      side: "right",
+      stance: "oppose",
+      round: 1,
+      text: "Add the first Oppose message here.",
+    },
 
-  // agents/topics optional (kept for your UI)
-  const agents = [
-    { name: "賛成派", side: "left" },
-    { name: "反対派", side: "right" }
+    // ======================== Round 2 ========================
+    {
+      speaker: "Support",
+      agentIndex: 0,
+      side: "left",
+      stance: "support",
+      round: 2,
+      text: "Add the second Support message here.",
+    },
+    {
+      speaker: "Oppose",
+      agentIndex: 1,
+      side: "right",
+      stance: "oppose",
+      round: 2,
+      text: "Add the second Oppose message here.",
+    },
+
+    // ======================== Round 3 ========================
+    {
+      speaker: "Support",
+      agentIndex: 0,
+      side: "left",
+      stance: "support",
+      round: 3,
+      text: "Add the third Support message here.",
+    },
+    {
+      speaker: "Oppose",
+      agentIndex: 1,
+      side: "right",
+      stance: "oppose",
+      round: 3,
+      text: "Add the third Oppose message here.",
+    },
   ];
 
-  return { topics: [], agents, messages };
+  return {
+    topics: [],
+    agents,
+    messages,
+  };
 }
