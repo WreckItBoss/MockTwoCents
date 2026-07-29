@@ -238,6 +238,8 @@ export default function Debate() {
                         </div>
                       </div>
 
+                      <div className="chat-divider" />
+                      
                       <MessageList
                         agents={agents}
                         messages={messages}
