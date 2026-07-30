@@ -139,6 +139,12 @@
 }
 
 /* ===== Team roster & badges ===== */
+.team-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
 .team {
   display: flex;
   gap: 8px;
@@ -150,8 +156,9 @@
 }
 
 .team-title {
-  font-weight: 600;
   margin-bottom: 6px;
+  color: #6b7280;
+  font-weight: 600;
 }
 
 .team-title.right {
@@ -159,13 +166,20 @@
 }
 
 .agent-badge {
-  border: 1px solid #e5e7eb;
-  background: #f3f4f6;
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
 }
-
+.agent-badge.support {
+  border: 1px solid rgb(172, 209, 249);
+  background: rgb(172, 209, 249);
+}
+.agent-badge.oppose {
+  border: 1px solid rgb(246, 169, 169);
+  background: rgb(246, 169, 169);
+}
 .agent-badge.right {
   border-color: #cfe0ff;
   background: #eef6ff;
@@ -259,5 +273,22 @@
   height: 1px;
   background: #d1d5db; /* light gray */
   margin: 24px 0;
+}
+
+.topic-header {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.topic-label {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.topic-name {
+  color: #111827;
+  font-weight: 700;
 }
 

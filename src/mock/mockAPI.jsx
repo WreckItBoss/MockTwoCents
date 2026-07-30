@@ -46,12 +46,12 @@ export async function generateDebate({ userPosition } = {}) {
 
   const agents = [
     {
-      name: "Support",
+      name: "データセンター運営会社の電力調達責任者",
       side: "left",
       stance: "support",
     },
     {
-      name: "Oppose",
+      name: "原発立地自地域の住民団体代表",
       side: "right",
       stance: "oppose",
     },

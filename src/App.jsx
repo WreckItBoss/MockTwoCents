@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { getArticle, generateDebate } from "./mock/mockAPI.jsx";
-import TopicChips from "./components/TopicChips.jsx";
 import MessageList from "./components/MessageList.jsx";
 import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
+
+const MOCK_TOPIC = "Nuclear Energy";
 
 export default function Debate() {
   const [status, setStatus] = useState(null);
   const [rounds] = useState(3);
   const [teamSize] = useState(1);
-  // const [userPosition, setUserPosition] = useState(null);
   const [showChat, setShowChat] = useState(false);
 
   const [article, setArticle] = useState(null);
@@ -19,20 +19,21 @@ export default function Debate() {
   const [debate, setDebate] = useState(null);
 
   useEffect(() => {
-    (async () => {
+    const loadArticle = async () => {
       try {
         setLoadingArticle(true);
 
         const doc = await getArticle();
-
         setArticle(doc);
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
         setArticle(null);
       } finally {
         setLoadingArticle(false);
       }
-    })();
+    };
+
+    loadArticle();
   }, []);
 
   const wait = (milliseconds) => {
@@ -47,23 +48,29 @@ export default function Debate() {
       setDebateError("");
       setStatus(null);
 
-      const res = await generateDebate({
+      const response = await generateDebate({
         numRounds: rounds,
         teamSize,
-        // userPosition,
       });
 
-      const allMessages = res.messages ?? [];
+      const allMessages = response.messages ?? [];
+      const allAgents = response.agents ?? [];
 
-      // Show the debate panel with no messages yet.
+      /*
+       * Open the generated debate view, but initially keep
+       * the agents and messages hidden.
+       */
       setDebate({
-        ...res,
+        ...response,
+        agents: [],
         messages: [],
       });
 
       setShowChat(true);
 
-      // Display "Creating agents..." in the center.
+      /*
+       * Phase 1: Creating agents
+       */
       setStatus({
         type: "system",
         text: "Creating agents...",
@@ -71,57 +78,117 @@ export default function Debate() {
 
       await wait(1500);
 
-      // Display "Agents created." in the center.
+      /*
+       * Phase 2: Agents created
+       *
+       * The team badges are added here.
+       */
+      setDebate((current) => ({
+        ...current,
+        agents: allAgents,
+      }));
+
       setStatus({
         type: "system",
         text: "Agents created.",
       });
 
-      await wait(1000);
+      await wait(1200);
+
+      /*
+       * Phase 3: Preparing debate
+       */
+      setStatus({
+        type: "system",
+        text: "Preparing debate...",
+      });
+
+      await wait(1200);
 
       setStatus(null);
 
-      // Reveal each predefined message one at a time.
+      /*
+       * Phase 4: Reveal each message one at a time.
+       */
       for (const message of allMessages) {
         const agent =
           typeof message.agentIndex === "number"
-            ? res.agents?.[message.agentIndex]
-            : null;
+            ? allAgents[message.agentIndex]
+            : allAgents.find(
+                (candidate) =>
+                  candidate.name === message.speaker,
+              );
 
-        const speaker = message.speaker || agent?.name || "Agent";
-        const side = message.side || agent?.side || "left";
+        const speaker =
+          message.speaker ||
+          agent?.name ||
+          "Agent";
 
-        // Display the thinking bubble on the agent's side.
+        const stance =
+          message.stance ||
+          agent?.stance ||
+          (message.side === "right" ||
+          agent?.side === "right"
+            ? "oppose"
+            : "support");
+
+        /*
+         * Display the thinking bubble.
+         */
         setStatus({
           type: "agent",
           speaker,
-          side,
-          text: `${speaker} is thinking...`,
+          stance,
         });
 
         await wait(1000);
 
         setStatus(null);
 
-        // Add the completed message.
+        /*
+         * Add the finished message.
+         */
         setDebate((current) => ({
           ...current,
-          messages: [...current.messages, message],
+          messages: [
+            ...current.messages,
+            {
+              ...message,
+              speaker,
+              stance,
+            },
+          ],
         }));
 
         await wait(400);
       }
-    } catch (e) {
-      setDebateError(e.message || String(e));
+    } catch (error) {
+      console.error(error);
+
+      setDebateError(
+        error.message || "Debate generation failed.",
+      );
+
       setStatus(null);
     } finally {
       setDebateLoading(false);
     }
   };
 
-  const topics = debate?.topics ?? [];
   const agents = debate?.agents ?? [];
   const messages = debate?.messages ?? [];
+
+  const supportAgents = agents.filter(
+    (agent) =>
+      agent.stance === "support" ||
+      agent.side === "left",
+  );
+
+  const opposeAgents = agents.filter(
+    (agent) =>
+      agent.stance === "oppose" ||
+      agent.side === "right",
+  );
 
   return (
     <>
@@ -131,21 +198,27 @@ export default function Debate() {
         <div className="debate-body">
           <div className="control-bar">
             <button
-              onClick={() => setShowChat((s) => !s)}
-              title={showChat ? "Hide Chat" : "Show Chat"}
+              onClick={() =>
+                setShowChat((current) => !current)
+              }
+              title={
+                showChat ? "Hide Chat" : "Show Chat"
+              }
             >
               {showChat ? "Hide Chat" : "Show Chat"}
             </button>
           </div>
 
           {debateError && (
-            <div style={{ color: "crimson", marginBottom: 12 }}>
+            <div className="debate-error">
               Error: {debateError}
             </div>
           )}
 
           <div
-            className={`debate-container ${showChat ? "split" : "single"}`}
+            className={`debate-container ${
+              showChat ? "split" : "single"
+            }`}
           >
             {/* Article panel */}
             <section className="panel">
@@ -154,34 +227,32 @@ export default function Debate() {
               </div>
 
               <div className="panel-body">
-                {loadingArticle && <div>Loading article…</div>}
+                {loadingArticle && (
+                  <div>Loading article...</div>
+                )}
 
                 {!loadingArticle && !article && (
-                  <div style={{ color: "#999" }}>
+                  <div className="empty-state">
                     Article not found.
                   </div>
                 )}
 
                 {article && (
                   <>
-                    <h3 style={{ margin: "0 0 6px" }}>
+                    <h3 className="article-title">
                       {article.title}
                     </h3>
 
                     <div className="meta">
                       {article.source} • {article.topic} •{" "}
                       {article.date
-                        ? new Date(article.date).toLocaleDateString()
+                        ? new Date(
+                            article.date,
+                          ).toLocaleDateString()
                         : ""}
                     </div>
 
-                    <div
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        marginTop: 12,
-                        lineHeight: 1.6,
-                      }}
-                    >
+                    <div className="article-content">
                       {article.content_original ||
                         article.content ||
                         "(No content)"}
@@ -203,6 +274,7 @@ export default function Debate() {
                     <div className="debate-controls">
                       <div className="control-row">
                         <button
+                          type="button"
                           className="generate-btn"
                           onClick={onGenerate}
                           disabled={debateLoading}
@@ -215,19 +287,32 @@ export default function Debate() {
                     </div>
                   ) : (
                     <>
-                      <TopicChips topics={topics} />
+                      <div className="topic-header">
+                        <span className="topic-label">
+                          Topic:
+                        </span>{" "}
+                        <span className="topic-name">
+                          {MOCK_TOPIC}
+                        </span>
+                      </div>
 
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gap: 12,
-                          marginBottom: 12,
-                        }}
-                      >
+                      <div className="team-columns">
                         <div>
                           <div className="team-title">
                             Support
+                          </div>
+
+                          <div className="team">
+                            {supportAgents.map(
+                              (agent, index) => (
+                                <div
+                                  key={`support-${agent.name}-${index}`}
+                                  className="agent-badge support"
+                                >
+                                  {agent.name}
+                                </div>
+                              ),
+                            )}
                           </div>
                         </div>
 
@@ -235,11 +320,24 @@ export default function Debate() {
                           <div className="team-title right">
                             Oppose
                           </div>
+
+                          <div className="team right">
+                            {opposeAgents.map(
+                              (agent, index) => (
+                                <div
+                                  key={`oppose-${agent.name}-${index}`}
+                                  className="agent-badge oppose"
+                                >
+                                  {agent.name}
+                                </div>
+                              ),
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       <div className="chat-divider" />
-                      
+
                       <MessageList
                         agents={agents}
                         messages={messages}
