@@ -1,3 +1,5 @@
+import "./MessageList.css";
+
 function TypingDots() {
   return (
     <span className="typing-dots" aria-label="Thinking">

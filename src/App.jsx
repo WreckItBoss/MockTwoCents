@@ -73,7 +73,7 @@ export default function Debate() {
        */
       setStatus({
         type: "system",
-        text: "Creating agents...",
+        text: "Creating agents",
       });
 
       await wait(1500);
@@ -100,7 +100,7 @@ export default function Debate() {
        */
       setStatus({
         type: "system",
-        text: "Preparing debate...",
+        text: "Preparing debate",
       });
 
       await wait(1200);
