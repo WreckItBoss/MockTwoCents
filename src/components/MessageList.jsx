@@ -1,101 +1,86 @@
+function TypingDots() {
+  return (
+    <span className="typing-dots" aria-label="Thinking">
+      <span />
+      <span />
+      <span />
+    </span>
+  );
+}
+
 export default function MessageList({
   agents = [],
   messages = [],
   status = null,
 }) {
-  const getAgentByIndex = (idx) => agents[idx] || null;
+  const getAgentByIndex = (index) => {
+    return agents[index] || null;
+  };
+
+  const getStance = ({ stance, side, agent }) => {
+    if (stance === "support" || stance === "oppose") {
+      return stance;
+    }
+
+    if (agent?.stance === "support" || agent?.stance === "oppose") {
+      return agent.stance;
+    }
+
+    if (side === "right" || agent?.side === "right") {
+      return "oppose";
+    }
+
+    return "support";
+  };
 
   return (
-    <div style={{ display: "grid", gap: 12 }}>
-      {messages.map((m, i) => {
+    <div className="message-list">
+      {messages.map((message, index) => {
         const agent =
-          typeof m.agentIndex === "number"
-            ? getAgentByIndex(m.agentIndex)
+          typeof message.agentIndex === "number"
+            ? getAgentByIndex(message.agentIndex)
             : null;
 
-        const side = m.side || agent?.side || "left";
-        const who = m.speaker || agent?.name || "Agent";
-
-        const alignSelf = side === "right" ? "end" : "start";
-        const bg = side === "right" ? "#ed8989ff" : "#80b7f2ff";
-        const border = side === "right" ? "#ed8989ff" : "#80b7f2ff";
+        const stance = getStance({
+          stance: message.stance,
+          side: message.side,
+          agent,
+        });
 
         return (
           <div
-            key={i}
-            style={{
-              justifySelf: alignSelf,
-              maxWidth: "78%",
-              border: `1px solid ${border}`,
-              borderRadius: 10,
-              padding: 12,
-              fontSize: 13,
-              background: bg,
-            }}
+            key={`${message.speaker || "agent"}-${index}`}
+            className={`message-bubble ${stance}`}
           >
-            <div
-              style={{
-                fontSize: 14,
-                color: "white",
-                marginBottom: 6,
-              }}
-            >
-              <strong>{who}</strong>
-            </div>
-
-            <div style={{ lineHeight: 1.5 }}>
-              {m.text}
+            <div className="message-text">
+              {message.text}
             </div>
           </div>
         );
       })}
 
       {status?.type === "system" && (
-        <div
-          style={{
-            justifySelf: "center",
-            padding: "8px 14px",
-            borderRadius: 8,
-            background: "#f3f4f6",
-            color: "#555",
-            fontSize: 14,
-            fontStyle: "italic",
-            textAlign: "center",
-          }}
-        >
+        <div className="system-status">
           {status.text}
         </div>
       )}
 
       {status?.type === "agent" && (
         <div
-          style={{
-            justifySelf: status.side === "right" ? "end" : "start",
-            maxWidth: "78%",
-            border: `1px solid ${
-              status.side === "right" ? "#ed8989ff" : "#80b7f2ff"
-            }`,
-            borderRadius: 10,
-            padding: 12,
-            fontSize: 13,
-            background:
-              status.side === "right" ? "#ed8989ff" : "#80b7f2ff",
-            opacity: 0.75,
-            fontStyle: "italic",
-          }}
+          className={`message-bubble thinking-bubble ${
+            status.stance === "oppose" ||
+            status.side === "right"
+              ? "oppose"
+              : "support"
+          }`}
         >
-          <div
-            style={{
-              fontSize: 14,
-              color: "white",
-              marginBottom: 6,
-            }}
-          >
-            <strong>{status.speaker}</strong>
-          </div>
+          <div className="thinking-content">
+            <span>
+              <strong>{status.speaker || "Agent"}</strong>{" "}
+              is thinking
+            </span>
 
-          <div style={{ lineHeight: 1.5 }}>
-            {status.text || "Thinking..."}
+            <TypingDots />
           </div>
         </div>
       )}
