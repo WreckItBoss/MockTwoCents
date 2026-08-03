@@ -79,7 +79,7 @@ export default function MessageList({
           <div className="thinking-content">
             <span>
               <strong>{status.speaker || "Agent"}</strong>{" "}
-              is thinking
+              が考え中
             </span>
 
             <TypingDots />

@@ -4,7 +4,7 @@ import MessageList from "./components/MessageList.jsx";
 import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
 
-const MOCK_TOPIC = "Nuclear Energy";
+const MOCK_TOPIC = "原子力発電";
 
 export default function Debate() {
   const [status, setStatus] = useState(null);
@@ -289,7 +289,7 @@ export default function Debate() {
                     <>
                       <div className="topic-header">
                         <span className="topic-label">
-                          Topic:
+                          話題:
                         </span>{" "}
                         <span className="topic-name">
                           {MOCK_TOPIC}
@@ -299,7 +299,7 @@ export default function Debate() {
                       <div className="team-columns">
                         <div>
                           <div className="team-title">
-                            Support
+                            賛成派
                           </div>
 
                           <div className="team">
@@ -318,7 +318,7 @@ export default function Debate() {
 
                         <div>
                           <div className="team-title right">
-                            Oppose
+                            反対派
                           </div>
 
                           <div className="team right">

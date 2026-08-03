@@ -96,7 +96,7 @@ export async function generateDebate({ userPosition } = {}) {
 
     // ======================== Round 3 ========================
     {
-      speaker: "Support",
+      speaker: "データセンター運営会社の電力調達責任者",
       agentIndex: 0,
       side: "left",
       stance: "support",
@@ -104,7 +104,7 @@ export async function generateDebate({ userPosition } = {}) {
       text: "正直、その「戻らないもの」は軽く見てはいけません。記事はデータセンター需要を強く出す一方で、地域の生活リスクの書き方が薄い。そこは弱点です。でも「リスクがあるから原子力なし」にすると、火力依存、燃料高、停電リスク、脱炭素遅れを全国に広げます。公平性は、川内ありきではなく、避難できる道路・病院・受け入れ先まで検証し、満たせないなら進めない。ただし原子力という選択肢自体は残すべきです。",
     },
     {
-      speaker: "Oppose",
+      speaker: "原発立地自地域の住民団体代表",
       agentIndex: 1,
       side: "right",
       stance: "oppose",
