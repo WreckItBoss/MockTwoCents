@@ -1,179 +1,52 @@
 import { useEffect, useState } from "react";
-import { getArticle, generateDebate } from "./mock/mockAPI.jsx";
+import {
+  getArticle,
+  generateDebate,
+} from "./mock/mockAPI.jsx";
 import MessageList from "./components/MessageList.jsx";
 import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
 
-const MOCK_TOPIC = "原子力発電"; //you can remove if you want
-
 export default function Debate() {
-  const [status, setStatus] = useState(null);
-  const [rounds] = useState(3);
-  const [teamSize] = useState(1);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
 
   const [article, setArticle] = useState(null);
   const [loadingArticle, setLoadingArticle] = useState(true);
-  const [debateLoading, setDebateLoading] = useState(false);
-  const [debateError, setDebateError] = useState("");
+
   const [debate, setDebate] = useState(null);
+  const [debateError, setDebateError] = useState("");
 
   useEffect(() => {
-    const loadArticle = async () => {
+    const loadPageData = async () => {
       try {
         setLoadingArticle(true);
+        setDebateError("");
 
-        const doc = await getArticle();
-        setArticle(doc);
+        const [articleResponse, debateResponse] =
+          await Promise.all([
+            getArticle(),
+            generateDebate(),
+          ]);
+
+        setArticle(articleResponse);
+        setDebate(debateResponse);
       } catch (error) {
         console.error(error);
+
         setArticle(null);
+        setDebate(null);
+
+        setDebateError(
+          error.message ||
+            "記事または議論の読み込みに失敗しました。",
+        );
       } finally {
         setLoadingArticle(false);
       }
     };
 
-    loadArticle();
+    loadPageData();
   }, []);
-
-  const wait = (milliseconds) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, milliseconds);
-    });
-  };
-
-  const onGenerate = async () => {
-    try {
-      setDebateLoading(true);
-      setDebateError("");
-      setStatus(null);
-
-      const response = await generateDebate({
-        numRounds: rounds,
-        teamSize,
-      });
-
-      const allMessages = response.messages ?? [];
-      const allAgents = response.agents ?? [];
-
-      /*
-       * Open the generated debate view, but initially keep
-       * the agents and messages hidden.
-       */
-      setDebate({
-        ...response,
-        agents: [],
-        messages: [],
-      });
-
-      setShowChat(true);
-
-      /*
-       * Phase 1: Creating agents
-       */
-      setStatus({
-        type: "system",
-        text: "Creating agents",
-      });
-
-      await wait(1500);
-
-      /*
-       * Phase 2: Agents created
-       *
-       * The team badges are added here.
-       */
-      setDebate((current) => ({
-        ...current,
-        agents: allAgents,
-      }));
-
-      setStatus({
-        type: "system",
-        text: "Agents created.",
-      });
-
-      await wait(1200);
-
-      /*
-       * Phase 3: Preparing debate
-       */
-      setStatus({
-        type: "system",
-        text: "Preparing debate",
-      });
-
-      await wait(1200);
-
-      setStatus(null);
-
-      /*
-       * Phase 4: Reveal each message one at a time.
-       */
-      for (const message of allMessages) {
-        const agent =
-          typeof message.agentIndex === "number"
-            ? allAgents[message.agentIndex]
-            : allAgents.find(
-                (candidate) =>
-                  candidate.name === message.speaker,
-              );
-
-        const speaker =
-          message.speaker ||
-          agent?.name ||
-          "Agent";
-
-        const stance =
-          message.stance ||
-          agent?.stance ||
-          (message.side === "right" ||
-          agent?.side === "right"
-            ? "oppose"
-            : "support");
-
-        /*
-         * Display the thinking bubble.
-         */
-        setStatus({
-          type: "agent",
-          speaker,
-          stance,
-        });
-
-        await wait(1000);
-
-        setStatus(null);
-
-        /*
-         * Add the finished message.
-         */
-        setDebate((current) => ({
-          ...current,
-          messages: [
-            ...current.messages,
-            {
-              ...message,
-              speaker,
-              stance,
-            },
-          ],
-        }));
-
-        await wait(400);
-      }
-    } catch (error) {
-      console.error(error);
-
-      setDebateError(
-        error.message || "Debate generation failed.",
-      );
-
-      setStatus(null);
-    } finally {
-      setDebateLoading(false);
-    }
-  };
 
   const agents = debate?.agents ?? [];
   const messages = debate?.messages ?? [];
@@ -198,14 +71,19 @@ export default function Debate() {
         <div className="debate-body">
           <div className="control-bar">
             <button
+              type="button"
               onClick={() =>
                 setShowChat((current) => !current)
               }
               title={
-                showChat ? "議論パネルを表示" : "議論パネルを隠す"
+                showChat
+                  ? "議論パネルを隠す"
+                  : "議論パネルを表示"
               }
             >
-              {showChat ? "議論パネルを隠す" : "議論パネルを表示"}
+              {showChat
+                ? "議論パネルを隠す"
+                : "議論パネルを表示"}
             </button>
           </div>
 
@@ -244,10 +122,15 @@ export default function Debate() {
                     </h3>
 
                     <div className="meta">
-                      {article.source} • {article.topic} •{" "}
-                      {article.date
-                        ? new Date(article.date).toLocaleDateString()
-                        : ""}
+                      {article.source}
+
+                      {article.topic &&
+                        ` • ${article.topic}`}
+
+                      {article.date &&
+                        ` • ${new Date(
+                          article.date,
+                        ).toLocaleDateString()}`}
                     </div>
 
                     <div
@@ -272,19 +155,8 @@ export default function Debate() {
 
                 <div className="panel-body">
                   {!debate ? (
-                    <div className="debate-controls">
-                      <div className="control-row">
-                        <button
-                          type="button"
-                          className="generate-btn"
-                          onClick={onGenerate}
-                          disabled={debateLoading}
-                        >
-                          {debateLoading
-                            ? "生成中..."
-                            : "意見を生成する"}
-                        </button>
-                      </div>
+                    <div className="empty-state">
+                      議論を読み込んでいます...
                     </div>
                   ) : (
                     <>
@@ -293,7 +165,7 @@ export default function Debate() {
                           話題:
                         </span>{" "}
                         <span className="topic-name">
-                          {article?.topic || MOCK_TOPIC}
+                          {article?.topic}
                         </span>
                       </div>
 
@@ -342,7 +214,6 @@ export default function Debate() {
                       <MessageList
                         agents={agents}
                         messages={messages}
-                        status={status}
                       />
                     </>
                   )}
