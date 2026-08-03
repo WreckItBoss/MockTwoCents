@@ -4,7 +4,7 @@ import MessageList from "./components/MessageList.jsx";
 import "./App.css";
 import Navigator from "./components/Navigator/Navigator.jsx";
 
-const MOCK_TOPIC = "原子力発電";
+const MOCK_TOPIC = "原子力発電"; //you can remove if you want
 
 export default function Debate() {
   const [status, setStatus] = useState(null);
