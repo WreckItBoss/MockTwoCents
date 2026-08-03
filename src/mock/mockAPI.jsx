@@ -24,11 +24,11 @@ export async function getArticle() {
   const topic = parts[1] || "";
   const date = parts[2] || null;
 
-  const articleEl = doc.querySelector("article");
+const articleEl = doc.querySelector("article");
 
-  const content = articleEl
-    ? articleEl.textContent.trim()
-    : "(No content)";
+const contentHtml = articleEl
+  ? articleEl.innerHTML.trim()
+  : "<p>(No content)</p>";
 
   return {
     id: "news-1",
