@@ -1,12 +1,33 @@
 // src/mock/mockAPI.jsx
 
+const MOCK_ARTICLE = "NuclearEnergy";
+
+const ARTICLE_CONFIG = {
+  NuclearEnergy: {
+    file: "/NuclearEnergy.html",
+    topic: "原子力発電",
+  },
+  SelfDrivingCars: {
+    file: "/SelfDrivingCars.html",
+    topic: "自動運転",
+  },
+  Surveillance: {
+    file: "/Surveillance.html",
+    topic: "監視社会",
+  },
+};
+
 export async function getArticle() {
-  // const res = await fetch("/SelfDrivingCars.html");
-  const res = await fetch("/NuclearEnergy.html");
-  // const res = await fetch("/Surveillance.html");
+  const articleConfig = ARTICLE_CONFIG[MOCK_ARTICLE];
+
+  if (!articleConfig) {
+    throw new Error(`Unknown mock article: ${MOCK_ARTICLE}`);
+  }
+
+  const res = await fetch(articleConfig.file);
 
   if (!res.ok) {
-    throw new Error("Failed to load article");
+    throw new Error(`Failed to load ${articleConfig.file}`);
   }
 
   const html = await res.text();
@@ -21,20 +42,19 @@ export async function getArticle() {
   const parts = metaText.split("・").map((part) => part.trim());
 
   const source = parts[0] || "";
-  const topic = parts[1] || "";
   const date = parts[2] || null;
 
-const articleEl = doc.querySelector("article");
+  const articleEl = doc.querySelector("article");
 
-const contentHtml = articleEl
-  ? articleEl.innerHTML.trim()
-  : "<p>(No content)</p>";
+  const contentHtml = articleEl
+    ? articleEl.innerHTML.trim()
+    : "<p>(No content)</p>";
 
   return {
     id: "news-1",
     title,
     source,
-    topic,
+    topic: articleConfig.topic,
     date,
     contentHtml,
   };
