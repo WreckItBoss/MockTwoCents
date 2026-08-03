@@ -246,17 +246,18 @@ export default function Debate() {
                     <div className="meta">
                       {article.source} • {article.topic} •{" "}
                       {article.date
-                        ? new Date(
-                            article.date,
-                          ).toLocaleDateString()
+                        ? new Date(article.date).toLocaleDateString()
                         : ""}
                     </div>
 
-                    <div className="article-content">
-                        dangerouslySetInnerHTML={{
-                          __html: article.contentHtml || "<p>(No content)</p>",
-                        }}
-                    </div>
+                    <div
+                      className="article-content"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          article.contentHtml ||
+                          "<p>(No content)</p>",
+                      }}
+                    />
                   </>
                 )}
               </div>
