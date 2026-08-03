@@ -293,7 +293,7 @@ export default function Debate() {
                           話題:
                         </span>{" "}
                         <span className="topic-name">
-                          {MOCK_TOPIC}
+                          {article?.topic || MOCK_TOPIC}
                         </span>
                       </div>
 
