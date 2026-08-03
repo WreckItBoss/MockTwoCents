@@ -202,10 +202,10 @@ export default function Debate() {
                 setShowChat((current) => !current)
               }
               title={
-                showChat ? "Hide Chat" : "Show Chat"
+                showChat ? "議論パネルを表示" : "議論パネルを隠す"
               }
             >
-              {showChat ? "Hide Chat" : "Show Chat"}
+              {showChat ? "議論パネルを隠す" : "議論パネルを表示"}
             </button>
           </div>
 
@@ -223,7 +223,7 @@ export default function Debate() {
             {/* Article panel */}
             <section className="panel">
               <div className="panel-header">
-                <strong>News Article</strong>
+                <strong>ニュース記事</strong>
               </div>
 
               <div className="panel-body">
@@ -267,7 +267,7 @@ export default function Debate() {
             {showChat && (
               <section className="panel">
                 <div className="panel-header">
-                  <strong>Generate Opinion</strong>
+                  <strong>議論パネル</strong>
                 </div>
 
                 <div className="panel-body">
