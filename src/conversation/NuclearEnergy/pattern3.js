@@ -1,4 +1,4 @@
-// src/conversation/NuclearEnergy/pattern1.js
+// src/conversation/NuclearEnergy/pattern3.js
 
 const pattern3 = {
   agents: [
