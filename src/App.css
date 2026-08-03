@@ -292,3 +292,36 @@
   font-weight: 700;
 }
 
+
+
+/* Article Content */
+.article-content {
+  margin-top: 12px;
+  line-height: 1.8;
+  color: #111;
+}
+
+.article-content p {
+  margin: 1rem 0;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.article-content h2 {
+  font-size: 1.15rem;
+  margin: 1.6rem 0 0.6rem;
+}
+
+.article-content h3 {
+  font-size: 1.1rem;
+  margin: 1.6rem 0 0.6rem;
+}
+
+.article-content strong {
+  font-weight: 700;
+}
+
+.article-content a {
+  color: #2563eb;
+  overflow-wrap: anywhere;
+}

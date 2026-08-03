@@ -36,7 +36,7 @@ const contentHtml = articleEl
     source,
     topic,
     date,
-    content,
+    contentHtml,
   };
 }
 

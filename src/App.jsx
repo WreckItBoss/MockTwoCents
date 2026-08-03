@@ -253,9 +253,9 @@ export default function Debate() {
                     </div>
 
                     <div className="article-content">
-                      {article.content_original ||
-                        article.content ||
-                        "(No content)"}
+                        dangerouslySetInnerHTML={{
+                          __html: article.contentHtml || "<p>(No content)</p>",
+                        }}
                     </div>
                   </>
                 )}
