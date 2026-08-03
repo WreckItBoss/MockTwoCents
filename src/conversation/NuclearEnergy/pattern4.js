@@ -53,4 +53,4 @@ const pattern4 = {
   ]
 };
 
-export default pattern1;
+export default pattern4;
