@@ -45,7 +45,7 @@ const MOCK_CONFIG = {
 
   Surveillance: {
     file: "/Surveillance.html",
-    topic: "監視社会",
+    topic: "超監視時代",
     conversations: {
       1: surveillancePattern1,
       2: surveillancePattern2,
